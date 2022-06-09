@@ -27,6 +27,9 @@
     "url": "https://github.com/CaptainJack-Git/pearl-cli/issues"
   },
   "dependencies": {
-    "npmlog": "^6.0.2"
+    "axios": "^0.27.2",
+    "npmlog": "^6.0.2",
+    "semver": "^7.3.7",
+    "url-join": "^5.0.0"
   }
 }

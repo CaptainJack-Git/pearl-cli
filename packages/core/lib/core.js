@@ -2,8 +2,9 @@ const path = require('path')
 const semver = require('semver')
 const colors = require('colors')
 
-const { log } = require('@pearl-cli/utils')
+const { log, npm } = require('@pearl-cli/utils')
 const { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } = require('./constants')
+const pkg = require('../package.json')
 
 let userHome
 
@@ -13,6 +14,7 @@ async function core() {
     checkNodeVersion()
     await checkUserHome()
     await checkEnv()
+    await checkUpdate()
   } catch (err) {
     if (err.message) {
       log.error(err.message)
@@ -75,6 +77,30 @@ function createDefaultConfig() {
   process.env.CLI_HOME_PATH = cliConfig.cliHome
 
   return cliConfig
+}
+
+/**
+ * 检查脚手架版本是否需要更新
+ * 1、获取当前版本号和模块名
+ * 2、调用 npm API，获取远端 npm 所有版本号
+ * 3、提取所有版本号，比对哪些版本号是大于当前版本号
+ * 4、获取最新的版本号，提示用户更新版本
+ */
+async function checkUpdate() {
+  const currentVersion = pkg.version
+  const npmName = pkg.name
+
+  const latestVersion = await npm.getNpmLatestVersion(npmName)
+
+  if (latestVersion && semver.gt(latestVersion, currentVersion)) {
+    log.warn(`
+      @pearl-cli/core 有新版本! 当前版本为 ${currentVersion},
+      最新版本为 ${latestVersion},
+      请使用 npm update -g @pearl-cli/core 更新
+    `)
+  } else {
+    log.verbose('@pearl-cli/core 当前已是最新版本')
+  }
 }
 
 module.exports = core
