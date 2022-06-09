@@ -1,1 +1,5 @@
-console.log('this is utils package')
+const log = require('./lib/log')
+
+module.exports = {
+  log,
+}

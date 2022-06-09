@@ -25,5 +25,8 @@
   },
   "bugs": {
     "url": "https://github.com/CaptainJack-Git/pearl-cli/issues"
+  },
+  "dependencies": {
+    "npmlog": "^6.0.2"
   }
 }
