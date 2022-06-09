@@ -4,10 +4,13 @@ const colors = require('colors')
 const { log } = require('@pearl-cli/utils')
 const { LOWEST_NODE_VERSION } = require('./constants')
 
+let userHome
+
 async function core() {
   try {
     await checkRoot()
     checkNodeVersion()
+    await checkUserHome()
   } catch (err) {
     if (err.message) {
       log.error(err.message)
@@ -31,6 +34,15 @@ function checkNodeVersion() {
     throw new Error(
       colors.red(`当前node版本为${process.version}，node版本不低于 ${LOWEST_NODE_VERSION}`)
     )
+  }
+}
+
+// 判断用户主目录，以便于后续存放缓存
+async function checkUserHome() {
+  userHome = require('userhome')()
+  const { pathExists } = await import('path-exists')
+  if (!userHome || !pathExists(userHome)) {
+    throw new Error(colors.red('用户主目录不存在，请检查'))
   }
 }
 
