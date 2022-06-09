@@ -1,8 +1,9 @@
+const path = require('path')
 const semver = require('semver')
 const colors = require('colors')
 
 const { log } = require('@pearl-cli/utils')
-const { LOWEST_NODE_VERSION } = require('./constants')
+const { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } = require('./constants')
 
 let userHome
 
@@ -11,6 +12,7 @@ async function core() {
     await checkRoot()
     checkNodeVersion()
     await checkUserHome()
+    await checkEnv()
   } catch (err) {
     if (err.message) {
       log.error(err.message)
@@ -44,6 +46,35 @@ async function checkUserHome() {
   if (!userHome || !pathExists(userHome)) {
     throw new Error(colors.red('用户主目录不存在，请检查'))
   }
+}
+
+// 检查环境变量，如果有 .env 就注入到 process.env 中
+async function checkEnv() {
+  const dotenv = require('dotenv')
+  // 这个是在用户主目录的环境变量文件
+  const envPath = path.join(userHome, '.env')
+  const { pathExists } = await import('path-exists')
+  if (pathExists(envPath)) {
+    dotenv.config({ path: envPath })
+  }
+
+  createDefaultConfig()
+}
+
+// 默认配置
+function createDefaultConfig() {
+  const cliConfig = { home: userHome }
+
+  // 用户可自行配置用于缓存的目录
+  if (process.env.CLI_HOME) {
+    cliConfig.cliHome = path.join(userHome, process.env.CLI_HOME)
+  } else {
+    cliConfig.cliHome = path.join(userHome, DEFAULT_CLI_HOME)
+  }
+
+  process.env.CLI_HOME_PATH = cliConfig.cliHome
+
+  return cliConfig
 }
 
 module.exports = core
