@@ -15,6 +15,11 @@
       "args": [
         "--debug"
       ],
+      "env": {
+        // 起始的时候，执行日志级别，能够看到命令注册前的日志
+        // pearl --debug 只能看到命令注册后的日志
+        "LOG_LEVEL": "debug"
+      },
       "console": "integratedTerminal"
     }
   ]

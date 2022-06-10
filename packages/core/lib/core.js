@@ -4,6 +4,7 @@ const colors = require('colors')
 
 const { log, npm } = require('@pearl-cli/utils')
 const { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } = require('./constants')
+const { regiserCommand } = require('./commands')
 const pkg = require('../package.json')
 
 let userHome
@@ -15,6 +16,8 @@ async function core() {
     await checkUserHome()
     await checkEnv()
     await checkUpdate()
+
+    regiserCommand()
   } catch (err) {
     if (err.message) {
       log.error(err.message)
@@ -29,7 +32,7 @@ async function core() {
  */
 async function checkRoot() {
   await import('root-check')
-  log.info('用户权限:', process.geteuid())
+  log.verbose('用户权限:', process.geteuid())
 }
 
 // 设置最低版本号，对比用户当前运行的 node 版本是否可以运行
