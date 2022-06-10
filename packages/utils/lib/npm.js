@@ -30,4 +30,5 @@ async function getNpmLatestVersion(npmName) {
 
 module.exports = {
   getNpmLatestVersion,
+  getRemoteNpmInfo,
 }
