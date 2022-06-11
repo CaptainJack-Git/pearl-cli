@@ -1,5 +1,5 @@
 {
-  // 使用 IntelliSense 了解相关属性。 
+  // 使用 IntelliSense 了解相关属性。
   // 悬停以查看现有属性的描述。
   // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
@@ -8,13 +8,23 @@
       "type": "pwa-node",
       "request": "launch",
       "name": "pearl debug",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/packages/core/cli.js",
-      "args": [
-        "--debug"
-      ],
+      "args": ["--debug"],
+      "env": {
+        // 起始的时候，执行日志级别，能够看到命令注册前的日志
+        // pearl --debug 只能看到命令注册后的日志
+        "LOG_LEVEL": "debug"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "pearl init",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/packages/core/cli.js",
+      "args": ["--debug", "init"],
       "env": {
         // 起始的时候，执行日志级别，能够看到命令注册前的日志
         // pearl --debug 只能看到命令注册后的日志

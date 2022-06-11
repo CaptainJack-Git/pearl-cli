@@ -22,7 +22,7 @@ async function getRemoteNpmInfo(npmName) {
 async function getNpmLatestVersion(npmName) {
   // 获取某个 npm 的所有版本号
   const { versions } = await getRemoteNpmInfo(npmName)
-  const latestVersion = Object.keys(versions).sort((a, b) => semver.gt(b, a))[0]
+  const latestVersion = Object.keys(versions).sort((a, b) => (semver.gt(b, a) ? 1 : -1))[0]
 
   // 返回npm远端最新的那个版本号
   return latestVersion
@@ -31,4 +31,5 @@ async function getNpmLatestVersion(npmName) {
 module.exports = {
   getNpmLatestVersion,
   getRemoteNpmInfo,
+  npmRegistry,
 }
