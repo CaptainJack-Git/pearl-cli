@@ -34,8 +34,8 @@ function regiserCommand() {
     .action((name, options) => {
       let { targetPath } = options
       let storeDir
-      const packageName = 'npmlog'
-      const packageVersion = '0.0.1'
+      const packageName = '@pearl-cli/init'
+      const packageVersion = '0.0.0'
 
       execInit({ ...options, packageName, targetPath, storeDir, packageVersion })
     })
